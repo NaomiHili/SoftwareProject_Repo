@@ -3,8 +3,8 @@
     session_start();  // so user will know is he is logged in.
 
         
-    $_SESSION ["Username"] = $_POST["username"];
-    $_SESSION ["Password"] = $_POST["password"];
+    $_SESSION ["Username"] = $_POST["username"];    //saving username in session
+    $_SESSION ["Password"] = $_POST["password"];    //saving password in session
 
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
 

@@ -2,12 +2,6 @@
     session_start(); //start session for the user
 ?>
 
-<?php
-
-    $Username = $_SESSION["Username"];  //to display username in the index page
-
-?>
-
 
 <!DOCTYPE html>
 <html>
@@ -44,9 +38,10 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Doctors</a>
+                  <a class="dropdown-item" href="doctor.php">Doctors</a>
+                  <a class="dropdown-item" href="#">Patients</a>
                   <a class="dropdown-item" href="#">Appointments</a>
-                  <a class="dropdown-item" href="#">Our medical center</a>
+                  <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
                   <a class="dropdown-item" href="#">Contact Us</a>

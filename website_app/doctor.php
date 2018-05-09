@@ -1,19 +1,36 @@
-<?php
-    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
-
-    $query = "select Name from Doctor_tbl";
+<!DOCTYPE html>
+   
+   <?php
     
-    $query1 = "select Name from Locality_tbl";
+    $DoctorId = $_POST['outDoctors'];
+    echo $DoctorId;
+ 
+    
+    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
+    
+    $query = "select * from Doctor_tbl";
+    
+    $query1 = "select * from Locality_tbl";
+    
+    $query2 = "select * from Doctor_tbl  where Doctor_Id = $DoctorId";
+    
+
+    
     
     $result = mysqli_query($conn, $query) or die ("Error in query". mysqli_error($conn));
     
     $result1 = mysqli_query($conn, $query1) or die ("Error in query". mysqli_error($conn));
     
+    $row1 = mysqli_fetch_assoc($result1);
+    
+    $result2 = mysqli_query($conn, $query2) or die ("Error in query". mysqli_error($conn));
+
+    $row2 = mysqli_fetch_assoc($result2);
+    echo $row2[Locality_Id];
+
 ?>
-
-
-<!DOCTYPE html>
-<html>
+   
+   <html>
     <head>
         <title> Derek Memorial Hospital</title>
         <meta charset="UTF-8"/>
@@ -25,13 +42,12 @@
 
        
         <script src='../runtime/jquery-3.2.1.min.js'></script>
-        <srcipt src='../runtime/popper.min.js'></srcipt>
-        <script src="js/javascript.js"></script> <!-- this is my js file -->
+        <srcipt src='../runtime/popper.min.js'></srcipt>   
     </head>
     <body>
-    
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">DMH</a>
+          <a class="navbar-brand" href="#"> </a>  <!-- add username in index page-->
+          
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -41,7 +57,7 @@
               <li class="nav-item active">
                 <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
               </li>
-               <li class="nav-item ">
+               <li class="nav-item">
                 <a class="nav-link" href="#">Medical Center <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item dropdown">
@@ -57,7 +73,54 @@
                   <a class="dropdown-item" href="#">About Us</a>
                   <a class="dropdown-item" href="#">Contact Us</a>
                 </div>
+                
+              <li class="nav-item">
+              
+                  <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
+                      Select doctor
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>  
+                            
+                          </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your doctor:</label>
+                              <form method="post" action="doctor.php">
+                              <select id="yourDoctor" name="outDoctors" class="form-control">
+                                 <?php
+                                  while($row = mysqli_fetch_assoc($result))
+                                  {
+                                    echo "<option value=".$row[Doctor_Id]."> $row[Name]</option>";
+                                  }
+                                ?>
+                              </select>
+            
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" value="Choose doctor">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              
               </li>
+                  
+                  
+              </li>
+              
+              
             </ul>
             
              <div class="btn-group mr-sm-2">
@@ -66,7 +129,9 @@
                 </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="login.php">Login</a>
-                    <a class="dropdown-item" href="login.php">Logout</a>
+                    <a class="dropdown-item" href="logout.php" name="logout">Logout</a> 
+                    
+                    
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="registration.php">Create account</a>
                   </div>
@@ -81,38 +146,40 @@
         </nav>
         
         <br>
-        
-        <form method="post" action="registerdb.php" name="registration" onsubmit="formValidation()">
+         <form method="post" action="registerdb.php" name="registration" onsubmit="formValidation()">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label> Name</label>
-              <input type="text" class="form-control" id="P_name" name="pname" placeholder="Name">
+              <input type="text" class="form-control" id="d_name" name="dname" placeholder="Name" value="<?php echo $row2['Name'];?>">
             </div>
             <div class="form-group col-md-6">
               <label>Surname</label>
-              <input type="text" class="form-control" id="P_surname" name="psurname" placeholder="Surname">
+              <input type="text" class="form-control" id="d_surname" name="dsurname" placeholder="Surname" value="<?php echo $row2['Surname'];?>">
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>House name/num</label>
-              <input type="text" class="form-control" id="houseName/num"  name="housename" placeholder="House name/num">
+              <input type="text" class="form-control" id="houseName/num"  name="housename" placeholder="House name/num"          value="<?php echo $row2['House name/ num'];?>">
             </div>
+            
             <div class="form-group col-md-6">
               <label>Street</label>
-              <input type="text" class="form-control" id="Street" name="street" placeholder="street">
+              <input type="text" class="form-control" id="Street" name="street" placeholder="street" value="<?php echo $row2['Street'];?>">
             </div>
           </div>
+          
+          
           
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>Locality</label>
-              <select id="Locality" name="locality" class="form-control">
+              <select id="Locality" name="locality" class="form-control" value='4'>
                <?php
-                  while($row = mysqli_fetch_assoc($result1))
+                  while($row1 = mysqli_fetch_assoc($result1))
                   {
-                    echo "<option> $row[Name]</option>";
+                    echo "<option value='$row1[Locality_Id]'> $row1[Name]</option>";
                   }
                 ?>
               </select>
@@ -125,55 +192,32 @@
               </select>
             </div>
           </div>
+            
+
           
           <div class="form-row">
           <div class="form-group col-md-6">
               <label>PostCode</label>
-              <input type="text" class="form-control" id="Postcode" name="postcode">
+              <input type="text" class="form-control" id="Postcode" name="postcode" value="<?php echo $row2['PostCode'];?>">
             </div>
             
             <div class="form-group col-md-6">
               <label>Mobile Number:</label>
-              <input type="text" class="form-control" id="mobilenumber" name="mobileNumber" placeholder="Mobile number">
+              <input type="text" class="form-control" id="mobilenumber" name="mobileNumber" placeholder="Mobile number" value="<?php echo $row2['Mobile_number'];?>">
             </div>
             
-            <div class="form-group col-md-6">
-              <label> Your doctor:</label>
-              <select id="yourDoctor" name="yourDoctor" class="form-control">
-               <?php
-                  while($row = mysqli_fetch_assoc($result))
-                  {
-                    echo "<option> $row[Name]</option>";
-                  }
-                ?>
-              </select>
-            </div>
-            
-            <div class="form-group col-md-6">
-              <label>Email</label>
-              <input type="email" class="form-control" id="Email" name="email" placeholder="Email">
-            </div>
             
             </div>
             
-            <div class="form-row">
-               <div class="form-group col-md-6">
-              <label>Username</label>
-              <input type="text" class="form-control" id="Username" name="username" placeholder="Username">
-                </div>
-            
-            <div class="form-group col-md-6">
-              <label>Password</label>
-              <input type="password" class="form-control" id="Password" name="password" placeholder="Password">
-                </div>
-           </div>    
           
-          <button type="submit" class="btn btn-outline-info" name="submit">Sign Up</button>
+          <button type="submit" class="btn btn-outline-info" name="submit">Edit</button>
         </form>
+    
+
         
         
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018 </a>
+          <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>
     </body>
 </html>

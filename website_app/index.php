@@ -7,9 +7,25 @@
     
     $_SESSION["Username"] = "";
     
-// if set statment
+    if(isset( $_SESSION["Username"])) 
+    {
+        echo "You are loggedin ";
+    }
+    else
+    {
+        echo"Login with Username and Password ";
+    }
+     
+
+    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
     
-    $_SESSION["Username"];  //to display username in the index page
+    $query = "select Name from Doctor_tbl";
+    
+    $query1 = "select Name from Locality_tbl";
+    
+    $result = mysqli_query($conn, $query) or die ("Error in query". mysqli_error($conn));
+    
+    $result1 = mysqli_query($conn, $query1) or die ("Error in query". mysqli_error($conn));
 
 ?>
    
@@ -29,7 +45,7 @@
     </head>
     <body>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#"> <?php  echo "Welcome to DMH " .$Username ?></a>  <!-- add username in index page-->
+          <a class="navbar-brand" href="#"> <?php  echo "Welcome to DMH " .$_SESSION["Username"] ?></a>  <!-- add username in index page-->
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -48,13 +64,57 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Doctors</a>
+                  <a class="dropdown-item" href="doctor.php">Doctors</a>
+                  <a class="dropdown-item" href="#">Patients</a>
                   <a class="dropdown-item" href="#">Appointments</a>
-                  <a class="dropdown-item" href="#">Our Medical center</a>
+                  <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
                   <a class="dropdown-item" href="#">Contact Us</a>
                 </div>
+              </li>
+              
+              <li class="nav-item">
+              
+                  <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+                      Select doctor
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>  
+                            
+                          </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your doctor:</label>
+                              <form method="post" action="doctor.php">
+                              <select id="yourDoctor" name="outDoctors" class="form-control">
+                                 <?php
+                                  while($row = mysqli_fetch_assoc($result))
+                                  {
+                                    echo "<option> $row[Name]</option>";
+                                  }
+                                ?>
+                              </select>
+            
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" value="Choose doctor">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              
               </li>
             </ul>
             

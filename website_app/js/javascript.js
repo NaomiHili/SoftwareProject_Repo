@@ -1,6 +1,7 @@
 
 function formValidation()
 {
+    alert("testing");
     var Name = document.forms["registration"]["pname"].value;
     var Surname = document.forms["registration"]["psurname"].value;
     var HouseName = document.forms["registration"]["housename"].value;

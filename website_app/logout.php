@@ -1,6 +1,10 @@
 <?php
 
-    session_start();
+    session_start(); //starts the session
     session_destroy(); //stops session for the user
-    header("Location: index.php");
+    header("Location: login.php"); // after session distroy you are re directed to the index page
+x
+
+
+    
 ?>
