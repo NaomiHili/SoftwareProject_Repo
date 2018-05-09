@@ -17,9 +17,9 @@
     }
      
 
-    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
+    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
     
-    $query = "select Name from Doctor_tbl";
+    $query = "select * from Doctor_tbl";
     
     $query1 = "select Name from Locality_tbl";
     
@@ -77,7 +77,7 @@
               <li class="nav-item">
               
                   <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
                       Select doctor
                     </button>
 
@@ -96,17 +96,15 @@
                             <div class="form-group col-md-6">
                               <label> Your doctor:</label>
                               <form method="post" action="doctor.php">
-                              <select id="yourDoctor" name="outDoctors" class="form-control">
+                              <select id="yourDoctor" name="ourDoctors" class="form-control">
                                  <?php
                                   while($row = mysqli_fetch_assoc($result))
                                   {
-                                    echo "<option> $row[Name]</option>";
+                                    echo "<option value=".$row['Doctor_Id'].">". $row['Name']."</option>";
                                   }
                                 ?>
                               </select>
             
-                            </div>
-                          </div>
                           <div class="modal-footer">
                             <input type="submit" class="btn btn-primary" value="Choose doctor">
                           </div>
@@ -114,8 +112,11 @@
                         </div>
                       </div>
                     </div>
+                  </div>
               
               </li>
+              
+        
             </ul>
             
              <div class="btn-group mr-sm-2">

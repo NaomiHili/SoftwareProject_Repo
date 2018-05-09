@@ -2,31 +2,30 @@
    
    <?php
     
-    $DoctorId = $_POST['outDoctors'];
-    echo $DoctorId;
+    $DoctorId = $_POST['ourDoctors'];
+    echo "id: ".$DoctorId;
  
     
-    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
+    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
+    $conn1 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
+    $conn2 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
+    $query = "select * from Doctor_tbl"; // query for all the items inthe doctor tabel 
     
-    $query = "select * from Doctor_tbl";
-    
-    $query1 = "select * from Locality_tbl";
+    $query1 = "select * from Locality_tbl"; //query for the locality table
     
     $query2 = "select * from Doctor_tbl  where Doctor_Id = $DoctorId";
-    
 
     
+    $result = mysqli_query($conn, $query) or die ("Error in query 1". mysqli_error($conn));
     
-    $result = mysqli_query($conn, $query) or die ("Error in query". mysqli_error($conn));
+    $result1 = mysqli_query($conn1, $query1) or die ("Error in query 2". mysqli_error($conn1));
     
-    $result1 = mysqli_query($conn, $query1) or die ("Error in query". mysqli_error($conn));
+   // $row1 = mysqli_fetch_assoc($result1);
     
-    $row1 = mysqli_fetch_assoc($result1);
-    
-    $result2 = mysqli_query($conn, $query2) or die ("Error in query". mysqli_error($conn));
+    $result2 = mysqli_query($conn2, $query2) or die ($query2. mysqli_error($conn2));
 
     $row2 = mysqli_fetch_assoc($result2);
-    echo $row2[Locality_Id];
+    echo $row2['Locality_Id'];
 
 ?>
    
@@ -66,7 +65,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="doctor.php">Doctors</a>
-                  <a class="dropdown-item" href="#">Patients</a>
+                  <a class="dropdown-item" href="patient.php">Patients</a>
                   <a class="dropdown-item" href="#">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
@@ -92,21 +91,20 @@
                             </button>  
                             
                           </div>
+                          
                           <div class="modal-body">
                             <div class="form-group col-md-6">
                               <label> Your doctor:</label>
                               <form method="post" action="doctor.php">
-                              <select id="yourDoctor" name="outDoctors" class="form-control">
+                              <select id="yourDoctor" name="ourDoctors" class="form-control">
                                  <?php
                                   while($row = mysqli_fetch_assoc($result))
                                   {
-                                    echo "<option value=".$row[Doctor_Id]."> $row[Name]</option>";
+                                    echo "<option value=".$row['Doctor_Id'].">". $row['Name']."</option>";
                                   }
                                 ?>
                               </select>
             
-                            </div>
-                          </div>
                           <div class="modal-footer">
                             <input type="submit" class="btn btn-primary" value="Choose doctor">
                           </div>
@@ -146,7 +144,7 @@
         </nav>
         
         <br>
-         <form method="post" action="registerdb.php" name="registration" onsubmit="formValidation()">
+         <form method="post" action="doctor.php" name="doctorCRUD">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label> Name</label>
@@ -171,15 +169,16 @@
           </div>
           
           
-          
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>Locality</label>
-              <select id="Locality" name="locality" class="form-control" value='4'>
+              <select id="Locality" name="locality" class="form-control" value=''>
                <?php
                   while($row1 = mysqli_fetch_assoc($result1))
                   {
-                    echo "<option value='$row1[Locality_Id]'> $row1[Name]</option>";
+                    echo "<option value='$row1[Locality_Id]'";
+                    if ($row2['Locality_Id']==$row1['Locality_Id']) echo " selected";
+                    echo "> $row1[Name]</option>";
                   }
                 ?>
               </select>

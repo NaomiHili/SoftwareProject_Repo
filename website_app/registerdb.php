@@ -13,7 +13,7 @@
     $Username = $_POST["username"];
     $Password = $_POST["password"];
 
-    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
+    $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
 
     $Docquery = "select Doctor_Id from Doctor_tbl where Name = '$Doctor1'";
 
