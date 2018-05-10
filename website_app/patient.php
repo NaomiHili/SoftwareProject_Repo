@@ -1,44 +1,43 @@
 <!DOCTYPE html>
    
-   <?php
-    session_start(); //start session for the user
-    
-    $_SESSION["Username"] = "";
-    
-    if(isset( $_SESSION["Username"])) 
-    {
-        echo "You are loggedin ";
-    }
-    else
-    {
-        echo"Login with Username and Password ";
-    }
+      <?php
+        session_start(); //start session for the user
+
+        $_SESSION["Username"] = "";
+
+        if(isset( $_SESSION["Username"])) 
+        {
+            echo "You are loggedin ";
+        }
+        else
+        {
+            echo"Login with Username and Password ";
+        }
     ?>
+   
    
    <?php
     
-    $DoctorId = $_POST['ourDoctors'];
-    echo "Id: ".$DoctorId . ",";
+    $PatientId = $_POST['ourPatients'];
+    echo "Id: ".$PatientId . ",";
  
     
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
-    $conn1 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
-    $conn2 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
 
-    $query = "select * from Doctor_tbl"; // query for all the items inthe doctor tabel 
+    $query = "select * from Patient_tbl"; // query for all the items inthe doctor tabel 
     
     $query1 = "select * from Locality_tbl"; //query for the locality table
     
-    $query2 = "select * from Doctor_tbl  where Doctor_Id = $DoctorId";
+    $query2 = "select * from Patient_tbl  where Patient_Id = $PatientId";
 
     
     $result = mysqli_query($conn, $query) or die ("Error in query 1". mysqli_error($conn));
     
-    $result1 = mysqli_query($conn1, $query1) or die ("Error in query 2". mysqli_error($conn1));
+    $result1 = mysqli_query($conn, $query1) or die ("Error in query 2". mysqli_error($conn));
     
    // $row1 = mysqli_fetch_assoc($result1);
     
-    $result2 = mysqli_query($conn2, $query2) or die ($query2. mysqli_error($conn2));
+    $result2 = mysqli_query($conn, $query2) or die ($query2. mysqli_error($conn));
 
     $row2 = mysqli_fetch_assoc($result2);
     echo  "LId:".$row2['Locality_Id'];
@@ -90,13 +89,18 @@
                 </div>
                 
               <li class="nav-item">
+              
+                  <!-- Button trigger modal
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
+                      Select doctor
+                    </button> -->
 
-                    <!--Doctor selection Modal -->
-                    <div class="modal fade" id="selectDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <!-- Modal -->
+                    <div class="modal fade" id="selectPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Our Patients</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>  
@@ -105,19 +109,19 @@
                           
                           <div class="modal-body">
                             <div class="form-group col-md-6">
-                              <label> Your doctor:</label>
-                              <form method="post" action="doctor.php">
-                              <select id="yourDoctor" name="ourDoctors" class="form-control">
+                              <label> Your Patients:</label>
+                              <form method="post" action="patient.php">
+                              <select id="yourPatient" name="ourPatients" class="form-control">
                                  <?php
                                   while($row = mysqli_fetch_assoc($result))
                                   {
-                                    echo "<option value=".$row['Doctor_Id'].">". $row['Name']."</option>";
+                                    echo "<option value=".$row['Patient_Id'].">". $row['Name']."</option>";
                                   }
                                 ?>
                               </select>
             
                           <div class="modal-footer">
-                            <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
+                            <input type="submit" class="btn btn-outline-info" value="Choose your patient">
                           </div>
                         </form>
                         </div>
@@ -126,9 +130,7 @@
               
               </li>
                   
-                  
               </li>
-              
               
             </ul>
             
@@ -169,7 +171,7 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>House name/num</label>
-              <input type="text" class="form-control" id="houseName/num"  name="housename" placeholder="House name/num"          value="<?php echo $row2['House name/ num'];?>">
+              <input type="text" class="form-control" id="houseName/num"  name="housename" placeholder="House name/num"          value="<?php echo $row2['House_name'];?>">
             </div>
             
             <div class="form-group col-md-6">

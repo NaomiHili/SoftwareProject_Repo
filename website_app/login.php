@@ -38,8 +38,8 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="doctor.php">Doctors</a>
-                  <a class="dropdown-item" href="#">Patients</a>
+                  <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectPatient">Patients</a>
                   <a class="dropdown-item" href="#">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
@@ -57,6 +57,7 @@
                     <a class="dropdown-item" href="login.php">Login</a>
                     <a class="dropdown-item" href="login.php">Logout</a>
                     <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
                   </div>
             </div>

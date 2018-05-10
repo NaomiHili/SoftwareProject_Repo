@@ -23,9 +23,13 @@
     
     $query1 = "select Name from Locality_tbl";
     
+    $query2 = "select * from Patient_tbl";
+    
     $result = mysqli_query($conn, $query) or die ("Error in query". mysqli_error($conn));
     
     $result1 = mysqli_query($conn, $query1) or die ("Error in query". mysqli_error($conn));
+    
+    $result2 = mysqli_query($conn, $query2) or die ("Error in query". mysqli_error($conn));
 
 ?>
    
@@ -64,8 +68,8 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="doctor.php">Doctors</a>
-                  <a class="dropdown-item" href="#">Patients</a>
+                  <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectPatient">Patients</a>
                   <a class="dropdown-item" href="#">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
@@ -74,15 +78,14 @@
                 </div>
               </li>
               
-              <li class="nav-item">
-              
-                  <!-- Button trigger modal -->
+              <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
+                  <!-- Button trigger modal for the doctor selection
                     <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
                       Select doctor
-                    </button>
+                    </button> the drop down item works as if there is a button  -->
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <!-- Modal form pop up for the doctor selection -->
+                    <div class="modal fade" id="selectDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -106,16 +109,57 @@
                               </select>
             
                           <div class="modal-footer">
-                            <input type="submit" class="btn btn-primary" value="Choose doctor">
+                            <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
                           </div>
                         </form>
                         </div>
                       </div>
                     </div>
                   </div>
-              
+                  </div>
               </li>
               
+              
+              <li class="nav-item"> <!-- nav item for patients -->
+              
+                  <!-- Button trigger modal
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
+                      Select doctor
+                    </button> -->
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="selectPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Patients</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>  
+                            
+                          </div>
+                          
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your Patients:</label>
+                              <form method="post" action="patient.php">
+                              <select id="yourPatient" name="ourPatients" class="form-control">
+                                 <?php
+                                  while($row1 = mysqli_fetch_assoc($result2))
+                                  {
+                                    echo "<option value=".$row1['Patient_Id'].">". $row1['Name']."</option>";
+                                  }
+                                ?>
+                              </select>
+            
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-info" value="Choose your patient">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              </li>
         
             </ul>
             
@@ -129,6 +173,7 @@
                     
                     
                     <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
                   </div>
             </div>
