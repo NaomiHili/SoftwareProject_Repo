@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
    
    <?php
     session_start(); //start session for the user
@@ -6,31 +6,40 @@
    
    <?php
     
-    $DoctorId = $_POST['ourDoctors'];
-    echo "Id: ".$DoctorId . ",";
+    $AppointmentsId = $_POST['ourAppointments'];
+    echo "Id: " . $AppointmentsId . ",";
  
     
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
-    $conn1 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
-    $conn2 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
 
-    $query = "select * from Doctor_tbl"; // query for all the items inthe doctor tabel 
+    $D_query = "select * from Doctor_tbl"; // query for all the items int he doctor tabel 
+
+    $P_query = "select * from Patient_tbl"; // query for all the items int he doctor tabel 
     
-    $query1 = "select * from Locality_tbl"; //query for the locality table
+    $A_query = "select * from Appointment_tbl"; //query for the appointment table
     
-    $query2 = "select * from Doctor_tbl  where Doctor_Id = $DoctorId";
+    $AID_query = "select * from Appointment_tbl  where Appointment_Id = $AppointmentsId"; // selec the table id
 
     
-    $result = mysqli_query($conn, $query) or die ("Error in query 1". mysqli_error($conn));
+    $D_result = mysqli_query($conn, $D_query) or die ("Error in query 1". mysqli_error($conn)); // doctor result
     
-    $result1 = mysqli_query($conn1, $query1) or die ("Error in query 2". mysqli_error($conn1));
+    $P_result = mysqli_query($conn, $P_query) or die ("Error in query 2". mysqli_error($conn)); // patient result
     
-   // $row1 = mysqli_fetch_assoc($result1);
+    $A_result = mysqli_query($conn, $A_query) or die ("Error in query 3". mysqli_error($conn)); // appointment table 
     
-    $result2 = mysqli_query($conn2, $query2) or die ($query2. mysqli_error($conn2));
+    $AID_result = mysqli_query($conn, $AID_query) or die ($AID_query. mysqli_error($conn)); // appointment Id result
 
-    $row2 = mysqli_fetch_assoc($result2);
-    echo  "LId:".$row2['Locality_Id'];
+    $row2 = mysqli_fetch_assoc($AID_result);
+    echo  "AId: ".$row2['Appointment_Id'] . ",";
+
+    $row3 = mysqli_fetch_assoc($D_result);
+    echo  " DId: ".$row3['Doctor_Id'] . ",";
+    
+    $row4 = mysqli_fetch_assoc($P_result);
+    echo  " PId: ".$row4['Patient_Id']. ",";   
+    
+    $row5 = mysqli_fetch_assoc($A_result);
+    echo  " APId: ".$row5['Appointment_Id']; 
 
 ?>
    
@@ -71,54 +80,48 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
                   <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#selectPatient">Patients</a>
-                  <a class="dropdown-item" href="#">Appointments</a>
+                  <a class="dropdown-item" href="appointment.php" data-toggle="modal" data-target="#selectAppointment">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
                   <a class="dropdown-item" href="#">Contact Us</a>
                 </div>
                 
-              <li class="nav-item">
+                  <li class="nav-item">
 
                     <!--Doctor selection Modal -->
-                    <div class="modal fade" id="selectDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="selectAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Our Appointments</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
-                            </button>  
-                            
-                          </div>
-                          
+                            </button>     
+                            </div>
                           <div class="modal-body">
                             <div class="form-group col-md-6">
-                              <label> Your doctor:</label>
-                              <form method="post" action="doctor.php">
-                              <select id="yourDoctor" name="ourDoctors" class="form-control">
+                              <label> Your Appointments:</label>
+                              <form method="post" action="appointment.php">
+                              <select id="yourAppointment" name="ourAppointments" class="form-control">
                                  <?php
-                                  while($row = mysqli_fetch_assoc($result))
+                                  while($row = mysqli_fetch_assoc($A_result))
                                   {
-                                    echo "<option value=".$row['Doctor_Id'].">". $row['Name']."</option>";
+                                    echo "<option value=".$row['Appointment_Id'].">". $row['Appointment_Id']."</option>";
                                   }
                                 ?>
                               </select>
             
                           <div class="modal-footer">
-                            <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
+                            <input type="submit" class="btn btn-outline-warning" value="Choose appointment">
                           </div>
                         </form>
                         </div>
                       </div>
                     </div>
-              
-              </li>
-                  
-                  
-              </li>
-              
-              
+              </li>  
+                          
+                </li>
             </ul>
             
              <div class="btn-group mr-sm-2">
@@ -143,77 +146,39 @@
         </nav>
         
         <br>
-         <form method="post" action="doctor.php" name="doctorCRUD">
+         <form method="post" action="appointment.php" name="appointmentCRUD">
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label> Name</label>
-              <input type="text" class="form-control" id="d_name" name="dname" placeholder="Name" value="<?php echo $row2['Name'];?>">
+              <label> Patient Name</label>
+              <input type="text" class="form-control" id="p_name" name="pname" placeholder="Patinet_Name" value="<?php echo $row4['Name'];?>">
             </div>
             <div class="form-group col-md-6">
-              <label>Surname</label>
-              <input type="text" class="form-control" id="d_surname" name="dsurname" placeholder="Surname" value="<?php echo $row2['Surname'];?>">
+              <label>Doctor Name</label>
+              <input type="text" class="form-control" id="d_name" name="dsname" placeholder="Doctor_Name" value="<?php echo $row3['Name'];?>">
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label>House name/num</label>
-              <input type="text" class="form-control" id="houseName/num"  name="housename" placeholder="House name/num"  value="<?php echo $row2['House name/ num'];?>">
+              <label>Date</label>
+              <input type="date" class="form-control" id="date"  name="date" placeholder="App_date"  value="<?php echo $row5['Date'];?>">
             </div>
             
             <div class="form-group col-md-6">
-              <label>Street</label>
-              <input type="text" class="form-control" id="Street" name="street" placeholder="street" value="<?php echo $row2['Street'];?>">
+              <label>Time</label>
+              <input type="text" class="form-control" id="time" name="time" placeholder="App_time" value="<?php echo $row5['Time'];?>">
             </div>
+          </div>     
+            
+            <div class="form-group">
+            <label>Appointment Breif</label>
+            <textarea type="text" class="form-control" rows="3" value="" readonly> <?php echo $row5['Appointment_brief'];?> </textarea>  
+            <!-- readonly at the end of the tag -->
           </div>
-          
-          
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label>Locality</label>
-              <select id="Locality" name="locality" class="form-control" value=''>
-               <?php
-                  while($row1 = mysqli_fetch_assoc($result1))
-                  {
-                    echo "<option value='$row1[Locality_Id]'";
-                    if ($row2['Locality_Id']==$row1['Locality_Id']) echo " selected";
-                    echo "> $row1[Name]</option>";
-                  }
-                ?>
-              </select>
-            </div>
-            
-            <div class="form-group col-md-6">
-              <label>Country</label>
-              <select id="country" class="form-control">
-                <option selected>Malta</option>
-              </select>
-            </div>
-          </div>
-            
-
-          
-          <div class="form-row">
-          <div class="form-group col-md-6">
-              <label>PostCode</label>
-              <input type="text" class="form-control" id="Postcode" name="postcode" value="<?php echo $row2['PostCode'];?>">
-            </div>
-            
-            <div class="form-group col-md-6">
-              <label>Mobile Number:</label>
-              <input type="text" class="form-control" id="mobilenumber" name="mobileNumber" placeholder="Mobile number" value="<?php echo $row2['Mobile_number'];?>">
-            </div>
-            
-            
-            </div>
-            
           
           <button type="submit" class="btn btn-outline-info" name="submit">Edit</button>
         </form>
     
-
-        
-        
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>

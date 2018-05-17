@@ -3,16 +3,6 @@
       <?php
         session_start(); //start session for the user
 
-        $_SESSION["Username"] = "";
-
-        if(isset( $_SESSION["Username"])) 
-        {
-            echo "You are loggedin ";
-        }
-        else
-        {
-            echo"Login with Username and Password ";
-        }
     ?>
    
    
@@ -60,7 +50,7 @@
     </head>
     <body>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#"> <?php  echo "Welcome to DMH " .$_SESSION["Username"] ?> </a>  <!-- add username in index page-->
+          <a class="navbar-brand" href="#">DMH</a>  <!-- add username in index page-->
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

@@ -5,15 +5,14 @@
 
 <?php
     
-    $_SESSION["Username"] = "";
     
-    if(isset( $_SESSION["Username"])) 
+    if(!isset( $_SESSION['Username'])) 
     {
-        echo "You are loggedin ";
+        $name = 'Guest';
     }
-    else
+    else if(isset($_SESSION['Username']))
     {
-        echo"Login with Username and Password ";
+        $name = $_SESSION['Username'];
     }
      
 
@@ -25,11 +24,15 @@
     
     $query2 = "select * from Patient_tbl";
     
+    $query3 = "select * from Appointment_tbl";
+    
     $result = mysqli_query($conn, $query) or die ("Error in query". mysqli_error($conn));
     
     $result1 = mysqli_query($conn, $query1) or die ("Error in query". mysqli_error($conn));
     
     $result2 = mysqli_query($conn, $query2) or die ("Error in query". mysqli_error($conn));
+    
+    $result3 = mysqli_query($conn, $query3) or die ("Error in query". mysqli_error($conn));
 
 ?>
    
@@ -49,7 +52,23 @@
     </head>
     <body>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#"> <?php  echo "Welcome to DMH " .$_SESSION["Username"] ?></a>  <!-- add username in index page-->
+          <a class="navbar-brand" href="#"> 
+          <?php  
+                
+                if(isset($_SESSION['Username']))
+                {
+                    $name = $_SESSION['Username'];
+                    echo "Welcome to DMH " .$name;
+                }
+              else
+              {
+                  $name = 'Guest';
+                  echo "Welcome to DMH " .$name;
+              }
+            
+           ?>
+          
+          </a>  <!-- add username in index page-->
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -69,8 +88,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
-                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectPatient">Patients</a>
-                  <a class="dropdown-item" href="#">Appointments</a>
+                  <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#selectPatient">Patients</a>
+                  <a class="dropdown-item" href="appointment.php" data-toggle="modal" data-target="#selectAppointment">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
@@ -79,10 +98,6 @@
               </li>
               
               <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
-                  <!-- Button trigger modal for the doctor selection
-                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
-                      Select doctor
-                    </button> the drop down item works as if there is a button  -->
 
                     <!-- Modal form pop up for the doctor selection -->
                     <div class="modal fade" id="selectDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -92,8 +107,7 @@
                             <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
-                            </button>  
-                            
+                            </button>     
                           </div>
                           <div class="modal-body">
                             <div class="form-group col-md-6">
@@ -107,7 +121,6 @@
                                   }
                                 ?>
                               </select>
-            
                           <div class="modal-footer">
                             <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
                           </div>
@@ -121,12 +134,6 @@
               
               
               <li class="nav-item"> <!-- nav item for patients -->
-              
-                  <!-- Button trigger modal
-                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
-                      Select doctor
-                    </button> -->
-
                     <!-- Modal -->
                     <div class="modal fade" id="selectPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
@@ -135,10 +142,8 @@
                             <h5 class="modal-title" id="exampleModalLabel">Our Patients</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
-                            </button>  
-                            
+                            </button>    
                           </div>
-                          
                           <div class="modal-body">
                             <div class="form-group col-md-6">
                               <label> Your Patients:</label>
@@ -151,7 +156,6 @@
                                   }
                                 ?>
                               </select>
-            
                           <div class="modal-footer">
                             <input type="submit" class="btn btn-outline-info" value="Choose your patient">
                           </div>
@@ -160,6 +164,38 @@
                       </div>
                     </div>
               </li>
+              
+            <li class="nav-item">
+                    <!--Appointment selection Modal -->
+                    <div class="modal fade" id="selectAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Appointments</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>     
+                            </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your Appointments:</label>
+                              <form method="post" action="appointment.php">
+                              <select id="yourAppointment" name="ourAppointments" class="form-control">
+                                 <?php
+                                  while($row3 = mysqli_fetch_assoc($result3))
+                                  {
+                                    echo "<option value=".$row3['Appointment_Id'].">". $row3['Appointment_Id']."</option>";
+                                  }
+                                ?>
+                              </select>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-danger" value="Choose Appointment">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              </li>  
         
             </ul>
             
