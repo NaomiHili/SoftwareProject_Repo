@@ -32,10 +32,12 @@
 
     $Locality = $row1[0];
 
+    // I added two new rows to my Account_tbl - EmailConfirm, Token -- dont know if i should add them here too
+
+
     $query1 = "INSERT INTO Account_tbl (Username, Email, Password) VALUES('$Username','$Email','$Password')";
     
     mysqli_query($conn,$query1);
-    
     
 
     $accquery = "select Account_Id from Account_tbl where Username = '$Username'";
