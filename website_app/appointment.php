@@ -2,6 +2,16 @@
    
    <?php
     session_start(); //start session for the user
+    
+    if(!isset( $_SESSION['Username'])) 
+    {
+        $name = 'Guest';
+    }
+    else if(isset($_SESSION['Username']))
+    {
+        $name = $_SESSION['Username'];
+    }
+
     ?>
    
    <?php
@@ -19,7 +29,6 @@
     $A_query = "select * from Appointment_tbl"; //query for the appointment table
     
     $AID_query = "select * from Appointment_tbl  where Appointment_Id = $AppointmentsId"; // selec the table id
-
     
     $D_result = mysqli_query($conn, $D_query) or die ("Error in query 1". mysqli_error($conn)); // doctor result
     
@@ -28,6 +37,7 @@
     $A_result = mysqli_query($conn, $A_query) or die ("Error in query 3". mysqli_error($conn)); // appointment table 
     
     $AID_result = mysqli_query($conn, $AID_query) or die ($AID_query. mysqli_error($conn)); // appointment Id result
+    
 
     $row2 = mysqli_fetch_assoc($AID_result);
     echo  "AId: ".$row2['Appointment_Id'] . ",";
@@ -59,7 +69,22 @@
     </head>
     <body>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">DMH</a>  <!-- add username in index page-->
+          <a class="navbar-brand" href="#">
+              <?php  
+                
+                if(isset($_SESSION['Username']))
+                {
+                    $name = $_SESSION['Username'];
+                    echo "Welcome to DMH " .$name;
+                }
+              else
+              {
+                  $name = 'Guest';
+                  echo "Welcome to DMH " .$name;
+              }
+            
+           ?>
+          </a>  <!-- add username in index page-->
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -84,7 +109,7 @@
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
-                  <a class="dropdown-item" href="#">Contact Us</a>
+                  <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
                 
                   <li class="nav-item">
@@ -119,8 +144,77 @@
                         </div>
                       </div>
                     </div>
-              </li>  
-                          
+              </li>
+                
+                <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
+
+                    <!-- Modal form pop up for the doctor selection -->
+                    <div class="modal fade" id="selectDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>     
+                          </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your doctor:</label>
+                              <form method="post" action="doctor.php">
+                              <select id="yourDoctor" name="ourDoctors" class="form-control">
+                                 <?php
+                                  while($row1 = mysqli_fetch_assoc($D_result))
+                                  {
+                                    echo "<option value=".$row1['Doctor_Id'].">". $row1['Name']."</option>";
+                                  }
+                                ?>
+                              </select>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+              </li>
+              
+              
+              <li class="nav-item"> <!-- nav item for patients -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="selectPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Patients</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>    
+                          </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your Patients:</label>
+                              <form method="post" action="patient.php">
+                              <select id="yourPatient" name="ourPatients" class="form-control">
+                                 <?php
+                                  while($row2 = mysqli_fetch_assoc($P_result))
+                                  {
+                                    echo "<option value=".$row2['Patient_Id'].">". $row2['Name']."</option>";
+                                  }
+                                ?>
+                              </select>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-info" value="Choose your patient">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              </li>
+  
+         
                 </li>
             </ul>
             

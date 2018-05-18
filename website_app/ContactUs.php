@@ -97,7 +97,6 @@
                   <a class="dropdown-item" href="#">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
-              </li>
               
               <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
 
@@ -198,7 +197,7 @@
                       </div>
                     </div>
               </li>  
-        
+            </li>
             </ul>
             
              <div class="btn-group mr-sm-2">
@@ -207,9 +206,7 @@
                 </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="login.php">Login</a>
-                    <a class="dropdown-item" href="logout.php" name="logout">Logout</a> 
-                    
-                    
+                    <a class="dropdown-item" href="logout.php" name="logout">Logout</a>                     
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
@@ -224,19 +221,76 @@
           </div>
         </nav>
         
-    
+        <br>
         
-        <div class="jumbotron">
-          <h1 class="display-4">Hello, world!</h1>
-          <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-          <hr class="my-4">
-          <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-          <a class="btn btn-warning btn-lg" href="#" role="button">Learn more</a>
-        </div>
-        
+        <form class="px-4 py-3" method="post" action="ContactUs.php">
+         <div class="form-group">
+            <label>Our Email address</label>
+            <input type="email" class="form-control" id="ourEmail" name="OurEmail" value="naomi.hili.a100807@mcast.edu.mt" readonly>
+          </div>
+         <br>
+          <div class="form-group">
+            <label>Your Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="name@example.com" name="User_email">
+          </div>
+          <br> 
+          <div class="form-group">
+            <label>Question:</label>
+            <input type="text" class="form-control" id="question" name="questionTitel">
+          </div>
+          <br>  
+          <div class="form-group">
+            <label>How can we help you:</label>
+            <textarea class="form-control" id="question" rows="3" name="Question"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-outline-success" name="submit">Send your Question</button>
+        </form>
         
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>
     </body>
 </html>
+
+<?php
+     
+       if (isset($_POST['submit'])) 
+        {   
+            $Our_Email = $_POST['OurEmail'];
+            $User_Email = $_POST['User_email'];
+            $titel = $_POST['questionTitel'];
+            $question = $_POST['Question'];
+            
+            require($_SERVER["DOCUMENT_ROOT"].'/phpmailer/PHPMailerAutoload.php'); #load the library required for phpmailer 
+            
+            $username = 'naomi.hili.a100807@mcast.edu.mt';
+            $password = 'Pizzaplace21';
+            $comments = "User: $User_Email has a question: $question";
+            $subject = "$titel";
+            $emailTo = "$Our_Email";
+            $mail = new PHPMailer(); #createing a new instance
+            $mail->isSMTP(); 
+            $mail->isHtml(true);
+            $mail->Host = 'smtp.office365.com';
+            #$mail->SMTPDebug = 2; #include client and server messges
+            $mail->Port = 587;
+            $mail->SMTPSecure = 'tls';
+            $mail->SMTPAuth = true;
+            $mail->Username = $username;
+            $mail->Password = $password;
+            $mail->Body = $comments;
+            $mail->Subject = $subject;
+            $mail->From = 'naomi.hili.a100807@mcast.edu.mt'; #sender
+            $mail->AddAddress($emailTo); #recepient
+
+            if (!$mail->Send()) #sending the email
+            {
+                echo "Message was not sent";
+                echo "Mailer Error: ". $mail->ErrorInfo;
+            }
+            else
+                echo"<script>window.location.href='ContactUs.php';alert('Message sent.');</script>"; //alert and a redirection
+       }
+       
+?>

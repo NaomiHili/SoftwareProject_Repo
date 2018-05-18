@@ -55,7 +55,7 @@
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
-                  <a class="dropdown-item" href="#">Contact Us</a>
+                  <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
               </li>
             </ul>

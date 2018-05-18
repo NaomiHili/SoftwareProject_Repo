@@ -2,13 +2,23 @@
    
    <?php
     session_start(); //start session for the user
+    
+    if(!isset( $_SESSION['Username'])) 
+    {
+        $name = 'Guest';
+    }
+    else if(isset($_SESSION['Username']))
+    {
+        $name = $_SESSION['Username'];
+    }
+
     ?>
    
    <?php
     
     $DoctorId = $_POST['ourDoctors'];
     echo "Id: ".$DoctorId . ",";
- 
+    
     
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
     $conn1 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
@@ -19,18 +29,25 @@
     $query1 = "select * from Locality_tbl"; //query for the locality table
     
     $query2 = "select * from Doctor_tbl  where Doctor_Id = $DoctorId";
+    
+    $query3 = "select * from Patient_tbl";
+    
+    $query4 = "select * from Appointment_tbl";
 
     
     $result = mysqli_query($conn, $query) or die ("Error in query 1". mysqli_error($conn));
     
     $result1 = mysqli_query($conn1, $query1) or die ("Error in query 2". mysqli_error($conn1));
     
-   // $row1 = mysqli_fetch_assoc($result1);
-    
     $result2 = mysqli_query($conn2, $query2) or die ($query2. mysqli_error($conn2));
+    
+    $result3 = mysqli_query($conn, $query3) or die ("Error in query". mysqli_error($conn)); //patient 
+    
+    $result4 = mysqli_query($conn, $query4) or die ("Error in query". mysqli_error($conn)); // appointment
 
     $row2 = mysqli_fetch_assoc($result2);
     echo  "LId:".$row2['Locality_Id'];    
+
 
 ?>
    
@@ -50,7 +67,22 @@
     </head>
     <body>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">DMH</a>  <!-- add username in index page-->
+          <a class="navbar-brand" href="#">
+           <?php  
+                
+                if(isset($_SESSION['Username']))
+                {
+                    $name = $_SESSION['Username'];
+                    echo "Welcome to DMH " .$name;
+                }
+              else
+              {
+                  $name = 'Guest';
+                  echo "Welcome to DMH " .$name;
+              }
+            
+           ?>
+          </a>  <!-- add username in index page-->
           
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -71,11 +103,11 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
                   <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#selectPatient">Patients</a>
-                  <a class="dropdown-item" href="#">Appointments</a>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectAppointment">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
-                  <a class="dropdown-item" href="#">Contact Us</a>
+                  <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
                 
               <li class="nav-item">
@@ -112,13 +144,72 @@
                         </div>
                       </div>
                     </div>
-              
-              </li>
-                  
-                  
               </li>
               
+               <li class="nav-item"> <!-- nav item for patients -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="selectPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Patients</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>    
+                          </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your Patients:</label>
+                              <form method="post" action="patient.php">
+                              <select id="yourPatient" name="ourPatients" class="form-control">
+                                 <?php
+                                  while($row3 = mysqli_fetch_assoc($result3))
+                                  {
+                                    echo "<option value=".$row3['Patient_Id'].">". $row3['Name']."</option>";
+                                  }
+                                ?>
+                              </select>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-info" value="Choose your patient">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              </li>
               
+            <li class="nav-item">
+                    <!--Appointment selection Modal -->
+                    <div class="modal fade" id="selectAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Our Appointments</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>     
+                            </div>
+                          <div class="modal-body">
+                            <div class="form-group col-md-6">
+                              <label> Your Appointments:</label>
+                              <form method="post" action="appointment.php">
+                              <select id="yourAppointment" name="ourAppointments" class="form-control">
+                                 <?php
+                                  while($row4 = mysqli_fetch_assoc($result4))
+                                  {
+                                    echo "<option value=".$row4['Appointment_Id'].">". $row4['Appointment_Id']."</option>";
+                                  }
+                                ?>
+                              </select>
+                          <div class="modal-footer">
+                            <input type="submit" class="btn btn-outline-danger" value="Choose Appointment">
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+              </li>
+              </li>
             </ul>
             
              <div class="btn-group mr-sm-2">
@@ -186,7 +277,7 @@
             <div class="form-group col-md-6">
               <label>Country</label>
               <select id="country" class="form-control">
-                <option selected>Malta</option>
+                  <option selected>Malta</option>
               </select>
             </div>
           </div>
@@ -203,17 +294,11 @@
               <label>Mobile Number:</label>
               <input type="text" class="form-control" id="mobilenumber" name="mobileNumber" placeholder="Mobile number" value="<?php echo $row2['Mobile_number'];?>">
             </div>
-            
-            
             </div>
             
-          
-          <button type="submit" class="btn btn-outline-info" name="submitnew" action="updateDoctor.php">Save new Details</button>
+          <button type="submit" class="btn btn-outline-info" name="submitnew">Save new Details</button>
         </form>
-    
-
-        
-        
+            
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>
