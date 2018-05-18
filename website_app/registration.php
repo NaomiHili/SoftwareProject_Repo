@@ -50,8 +50,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#exampleModal">Doctors</a>
-                  <a class="dropdown-item" href="#">Patients</a>
-                  <a class="dropdown-item" href="#">Appointments</a>
+                  <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#exampleModal">Patients</a>
+                  <a class="dropdown-item" href="appointment.php" data-toggle="modal" data-target="#exampleModal">Appointments</a>
                   <a class="dropdown-item" href="#">Medication</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">About Us</a>
@@ -86,7 +86,7 @@
         <form method="post" action="registerdb.php" name="registration" onsubmit="formValidation()">
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label> Name</label>
+              <label>Name</label>
               <input type="text" class="form-control" id="P_name" name="pname" placeholder="Name">
             </div>
             <div class="form-group col-md-6">

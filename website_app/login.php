@@ -100,21 +100,22 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <form>
+                    <form class="px-4 py-3" method="post" action="forgotpassword.php">
                       <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" name="username" placeholder="username">
                       </div>
                       <div class="form-group">
                         <label for="message-text" class="col-form-label">Email address:</label>
-                        <input type="email" class="form-control">
+                        <input type="email" class="form-control" name="email" placeholder="email">
                       </div>
-                    </form>
+                    
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Send message</button>
+                   <button type="submit" class="btn btn-info" name="submit1">Send Message</button>
                   </div>
+                  </form>
                 </div>
               </div>
             </div>

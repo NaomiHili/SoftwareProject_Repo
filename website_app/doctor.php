@@ -30,7 +30,7 @@
     $result2 = mysqli_query($conn2, $query2) or die ($query2. mysqli_error($conn2));
 
     $row2 = mysqli_fetch_assoc($result2);
-    echo  "LId:".$row2['Locality_Id'];
+    echo  "LId:".$row2['Locality_Id'];    
 
 ?>
    
@@ -208,7 +208,7 @@
             </div>
             
           
-          <button type="submit" class="btn btn-outline-info" name="submit">Edit</button>
+          <button type="submit" class="btn btn-outline-info" name="submitnew" action="updateDoctor.php">Save new Details</button>
         </form>
     
 

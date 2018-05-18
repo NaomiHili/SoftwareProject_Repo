@@ -38,14 +38,14 @@
             $_SESSION['rowl'] = "Patient";
             echo "PATINET";
             
-        }
-        
-        
-        header("Location: index.php");
+        }    
+        echo"<script>window.location.href='index.php';alert('Logged in. ');</script>";  //using this insted as it gove me an alert box aswell
+        //header("Location: index.php");
     }
     else
     {
-        header("Location: login.php");
+        echo"<script>window.location.href='login.php';alert('Incorrect username or password.');</script>";
+        //header("Location: login.php");
     }
         
 ?>

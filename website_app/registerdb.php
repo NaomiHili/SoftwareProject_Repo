@@ -32,32 +32,43 @@
 
     $Locality = $row1[0];
 
-    // I added two new rows to my Account_tbl - EmailConfirm, Token -- dont know if i should add them here too
-
-
     $query1 = "INSERT INTO Account_tbl (Username, Email, Password) VALUES('$Username','$Email','$Password')";
-    
-    mysqli_query($conn,$query1);
+    echo $query1;
+    //mysqli_query($conn,$query1) or die (mysql_error($conn)); calling this in the if statment below
     
 
     $accquery = "select Account_Id from Account_tbl where Username = '$Username'";
     
-    $Accountrow = mysqli_query($conn,$accquery);
+    $Accountrow = mysqli_query($conn,$accquery) or die (mysql_error($conn));
 
-    $row2 = mysqli_fetch_row($Accountrow);
+    $row2 = mysqli_fetch_row($Accountrow); //or die (mysql_error($conn));  testing with
 
     $Account = $row2[0];
 
 
-    $conn1 = mysqli_connect("localhost", "root", "", "Hospital_db","3307")  or die ('Cannot donnect to the db');
+    $conn1 = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
 
     
-    $query2 = "INSERT INTO Patient_tbl (Name, Surname, House_name, Street, PostCode, Mobile_number,Location_Id, Doctor_Id,Account_Id) VALUES('$Name','$Surname','$Housname','$Street','$Postcode','$MobileNum',(select Locality_Id from Locality_tbl where Name = '$Locality1'), (select Doctor_Id from Doctor_tbl where Name = '$Doctor1'), (select Account_Id from Account_tbl where Username = '$Username') )";
+    $query2 = "INSERT INTO Patient_tbl (Name, Surname, House_name, Street, PostCode, Mobile_number,Locality_Id, Doctor_Id,Account_Id) VALUES('$Name','$Surname','$Housname','$Street','$Postcode','$MobileNum',(select Locality_Id from Locality_tbl where Name = '$Locality1'), (select Doctor_Id from Doctor_tbl where Name = '$Doctor1'), (select Account_Id from Account_tbl where Username = '$Username') )";
 
-    mysqli_query($conn1,$query2);
+    echo $query2;
+    //mysqli_query($conn1,$query2); calling this in the if statment
     
-    header("Location: login.php");
+
     
+    if($Name == "" || $Surname == "" || $Housname == "" || $Street == "" || $Postcode == "" || $MobileNum < 99999999  || $MobileNum > 77000000 || $Username == "" || $Email == "" || $Password == "")
+    {
+        echo"<script>window.location.href='registration.php';alert('Please fill in all the fields.');</script>";
+        
+    }
+    else
+    {
+        echo"<script>window.location.href='login.php';alert('Welcome you have registered and logged in to the system.');</script>";
+        mysqli_query($conn,$query1);
+        mysqli_query($conn1,$query2);
+    }
+    
+
 
 ?>
 

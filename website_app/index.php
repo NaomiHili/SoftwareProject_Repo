@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <?php
     session_start(); //start session for the user
+
+//for update save collums in session post than do an updte query
 ?>
 
 <?php
