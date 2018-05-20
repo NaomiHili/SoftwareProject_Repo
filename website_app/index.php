@@ -97,7 +97,7 @@
                   <a class="dropdown-item" href="#">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
-              </li>
+             
               
               <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
 
@@ -197,8 +197,8 @@
                         </div>
                       </div>
                     </div>
-              </li>  
-        
+                  </li>  
+             </li>
             </ul>
             
              <div class="btn-group mr-sm-2">

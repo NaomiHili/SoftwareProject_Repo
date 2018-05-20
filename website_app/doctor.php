@@ -135,7 +135,7 @@
                                     echo "<option value=".$row['Doctor_Id'].">". $row['Name']."</option>";
                                   }
                                 ?>
-                              </select>
+                              </select>7
             
                           <div class="modal-footer">
                             <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
@@ -234,7 +234,7 @@
         </nav>
         
         <br>
-         <form method="post" action="doctor.php" name="doctorCRUD">
+         <form method="post" action="updateDoctor.php" name="doctorCRUD">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label> Name</label>

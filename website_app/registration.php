@@ -1,4 +1,16 @@
 <?php
+    
+    session_start(); //start session for the user
+
+    if(!isset( $_SESSION['Username'])) 
+    {
+        $name = 'Guest';
+    }
+    else if(isset($_SESSION['Username']))
+    {
+        $name = $_SESSION['Username'];
+    }
+    
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
 
     $query = "select Name from Doctor_tbl";
@@ -31,7 +43,22 @@
     <body>
     
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">DMH</a>
+          <a class="navbar-brand" href="#">
+              <?php  
+                
+                if(isset($_SESSION['Username']))
+                {
+                    $name = $_SESSION['Username'];
+                    echo "Welcome to DMH " .$name;
+                }
+              else
+              {
+                  $name = 'Guest';
+                  echo "Welcome to DMH " .$name;
+              }
+            
+           ?>
+          </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>

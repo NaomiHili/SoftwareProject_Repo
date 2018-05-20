@@ -1,4 +1,15 @@
  <!DOCTYPE html>
+  
+  <?php 
+       // while($row = mysqli_fetch_assoc($A_result))
+    //    {
+    //       $row['Patient_Id'];
+    //       if ($row5['Patient_Id'] == $row4['Patient_Id'])    
+    //        {
+    //            $row['Name'];
+    //        }
+    //    }
+   ?>
    
    <?php
     session_start(); //start session for the user
@@ -18,39 +29,31 @@
     
     $AppointmentsId = $_POST['ourAppointments'];
     echo "Id: " . $AppointmentsId . ",";
- 
-    
+
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
+    
+    $query1 = "select * from Appointment_tbl  where Appointment_Id = $AppointmentsId"; // selec the table id
+    $result1 = mysqli_query($conn, $query1) or die ($query1. mysqli_error($conn)); // appointment Id result
 
-    $D_query = "select * from Doctor_tbl"; // query for all the items int he doctor tabel 
+    $query2 = "select * from Appointment_tbl";
+    $result2 = mysqli_query($conn, $query2)or die ($query2. mysqli_error($conn));
+    
+    
+    $query3 = "SELECT pt.Name, dc.Name, ap.Date, ap.Time, ap.Appointment_brief 
+    FROM Appointment_tbl AS ap INNER JOIN 
+    Doctor_tbl AS dc ON ap.Doctor_Id = dc.Doctor_Id INNER JOIN 
+    Patient_tbl AS pt  ON ap.Patient_Id = pt.Patient_Id 
+    WHERE ap.Appointment_Id = $AppointmentsId";
 
-    $P_query = "select * from Patient_tbl"; // query for all the items int he doctor tabel 
+    $result3 = mysql_query($conn, $query3) or die ($query3. mysqli_error($conn));
     
-    $A_query = "select * from Appointment_tbl"; //query for the appointment table
+    $query4 = "select * from Doctor_tbl";      
+    $result4 = mysql_query($conn, $query4) or die ($query4. mysqli_error($conn)); // this is used for the dropdown menu to go from app page to doctor page
     
-    $AID_query = "select * from Appointment_tbl  where Appointment_Id = $AppointmentsId"; // selec the table id
-    
-    $D_result = mysqli_query($conn, $D_query) or die ("Error in query 1". mysqli_error($conn)); // doctor result
-    
-    $P_result = mysqli_query($conn, $P_query) or die ("Error in query 2". mysqli_error($conn)); // patient result
-    
-    $A_result = mysqli_query($conn, $A_query) or die ("Error in query 3". mysqli_error($conn)); // appointment table 
-    
-    $AID_result = mysqli_query($conn, $AID_query) or die ($AID_query. mysqli_error($conn)); // appointment Id result
-    
+    $query5 = "select * from Patient_tbl";
+    $result5 = mysql_query($conn, $query5) or die ($query5. mysqli_error($conn)); // this is used for the dropdown menu to go to from app page to patient page
 
-    $row2 = mysqli_fetch_assoc($AID_result);
-    echo  "AId: ".$row2['Appointment_Id'] . ",";
-
-    $row3 = mysqli_fetch_assoc($D_result);
-    echo  " DId: ".$row3['Doctor_Id'] . ",";
     
-    $row4 = mysqli_fetch_assoc($P_result);
-    echo  " PId: ".$row4['Patient_Id']. ",";   
-    
-    $row5 = mysqli_fetch_assoc($A_result);
-    echo  " APId: ".$row5['Appointment_Id']; 
-
 ?>
    
    <html>
@@ -114,7 +117,8 @@
                 
                   <li class="nav-item">
 
-                    <!--Doctor selection Modal -->
+                    <li class="nav-item">
+                    <!--Appointment selection Modal -->
                     <div class="modal fade" id="selectAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -130,21 +134,20 @@
                               <form method="post" action="appointment.php">
                               <select id="yourAppointment" name="ourAppointments" class="form-control">
                                  <?php
-                                  while($row = mysqli_fetch_assoc($A_result))
+                                  while($row3 = mysqli_fetch_assoc($result2))
                                   {
-                                    echo "<option value=".$row['Appointment_Id'].">". $row['Appointment_Id']."</option>";
+                                    echo "<option value=".$row3['Appointment_Id'].">". $row3['Appointment_Id']."</option>";
                                   }
                                 ?>
                               </select>
-            
                           <div class="modal-footer">
-                            <input type="submit" class="btn btn-outline-warning" value="Choose appointment">
+                            <input type="submit" class="btn btn-outline-danger" value="Choose Appointment">
                           </div>
                         </form>
                         </div>
                       </div>
                     </div>
-              </li>
+              </li>  
                 
                 <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
 
@@ -164,7 +167,7 @@
                               <form method="post" action="doctor.php">
                               <select id="yourDoctor" name="ourDoctors" class="form-control">
                                  <?php
-                                  while($row1 = mysqli_fetch_assoc($D_result))
+                                  while($row1 = mysqli_fetch_assoc($result4))
                                   {
                                     echo "<option value=".$row1['Doctor_Id'].">". $row1['Name']."</option>";
                                   }
@@ -199,7 +202,7 @@
                               <form method="post" action="patient.php">
                               <select id="yourPatient" name="ourPatients" class="form-control">
                                  <?php
-                                  while($row2 = mysqli_fetch_assoc($P_result))
+                                  while($row2 = mysqli_fetch_assoc($result5))
                                   {
                                     echo "<option value=".$row2['Patient_Id'].">". $row2['Name']."</option>";
                                   }
