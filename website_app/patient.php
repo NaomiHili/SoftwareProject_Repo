@@ -16,8 +16,14 @@
    
    <?php
     
-    $PatientId = $_POST['ourPatients'];
-    echo "Id: ".$PatientId . ",";
+    $PatientId = 0;
+    
+    if(isset($_POST['ourPatients']))
+        $PatientId = $_POST['ourPatients'];
+    else
+        $PatientId=$_GET['ourPatients'];
+    
+    //echo "Id: ".$PatientId . ",";
  
     
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
@@ -45,7 +51,7 @@
     
 
     $row2 = mysqli_fetch_assoc($result2);
-    echo  "LId:".$row2['Locality_Id'];
+    //echo  "LId:".$row2['Locality_Id'];
 
 ?>
    
@@ -99,12 +105,23 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
-                  <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#selectPatient">Patients</a>
-                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectAppointment">Appointments</a>
-                  <a class="dropdown-item" href="#">Medication</a>
+    <?php
+                    if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
+                    {
+                  echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
+                        <a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
+                        <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
+                        <a class='dropdown-item' href='medication.php'>Medication</a> ";
+                    }
+                    else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
+                    {
+                      echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
+                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>";  
+                    }
+
+                    ?>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">About Us</a>
+                  <a class="dropdown-item" href="aboutUs.php">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
                 
@@ -127,6 +144,7 @@
                               <form method="post" action="patient.php">
                               <select id="yourPatient" name="ourPatients" class="form-control">
                                  <?php
+                                  
                                   while($row = mysqli_fetch_assoc($result))
                                   {
                                     echo "<option value=".$row['Patient_Id'].">". $row['Name']."</option>";
@@ -236,15 +254,15 @@
         </nav>
         
         <br>
-         <form method="post" action="doctor.php" name="doctorCRUD">
+         <form method="post" action="updatePatient.php" name="PatientCRUD">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label> Name</label>
-              <input type="text" class="form-control" id="d_name" name="dname" placeholder="Name" value="<?php echo $row2['Name'];?>">
+              <input type="text" class="form-control" id="d_name" name="pname" placeholder="Name" value="<?php echo $row2['Name'];?>">
             </div>
             <div class="form-group col-md-6">
               <label>Surname</label>
-              <input type="text" class="form-control" id="d_surname" name="dsurname" placeholder="Surname" value="<?php echo $row2['Surname'];?>">
+              <input type="text" class="form-control" id="d_surname" name="psurname" placeholder="Surname" value="<?php echo $row2['Surname'];?>">
             </div>
           </div>
           
@@ -301,11 +319,9 @@
             </div>
             
           
-          <button type="submit" class="btn btn-outline-info" name="submit">Edit</button>
+          <button type="submit" class="btn btn-outline-info" name="updateTable">Save details</button>
         </form>
-    
-
-        
+        <br>
         
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>

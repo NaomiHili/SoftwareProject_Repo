@@ -47,14 +47,13 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-        
-        <script src="js/javascript.js"></script> <!-- linking the js file to the index.php -->
+
+       
         <script src='../runtime/jquery-3.2.1.min.js'></script>
         <srcipt src='../runtime/popper.min.js'></srcipt>   
     </head>
     <body>
        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <!--<img  width="30" height="30" class="d-inline-block align-top" alt="" > -->
           <a class="navbar-brand" href="#"> 
           <?php  
                 
@@ -90,8 +89,7 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                
-                 <?php
+<?php
                     if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
                     {
                   echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
@@ -102,19 +100,16 @@
                     else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
                     {
                       echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
-                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>";  
+                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
+                            <a class='dropdown-item' href='medication.php'>Medication</a> ";  
                     }
 
                     ?>
-               
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="aboutUs.php">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
-             
               
-              
-            
               <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
 
                     <!-- Modal form pop up for the doctor selection -->
@@ -213,8 +208,8 @@
                         </div>
                       </div>
                     </div>
-                  </li>  
-             </li>
+              </li>  
+            </li>
             </ul>
             
              <div class="btn-group mr-sm-2">
@@ -223,9 +218,7 @@
                 </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="login.php">Login</a>
-                    <a class="dropdown-item" href="logout.php" name="logout">Logout</a> 
-                    
-                    
+                    <a class="dropdown-item" href="logout.php" name="logout">Logout</a>                     
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
@@ -235,88 +228,29 @@
             <form class="form-inline my-2 my-lg-0 mr-sm-2">
               <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
-            </form>    
-                          
+            </form>              
           </div>
         </nav>
-        
         <br>
         
-        <div class="jumbotron">
-          <h1 class="display-4">Best Quotes!</h1>
-          <p class="lead">Dr.Mark Sloan: If you love someone you tell them. Even if you’re scared that it’s not the right thing. Even if you’re scared it’ll cause problems. Even if you’re scared that it will burn your life to the ground. You say it. You say it loud.</p>
-          <hr class="my-4">
-          <p> Dr.Richard Webber: Sometimes it's good to be scared. It means you still have something to lose.</p>
-          <a class="btn btn-outline-dark btn-lg" href="#" role="button">Learn more</a>
-        </div>
-        
+        <h2> Contact Us!</h2>
         <br>
         
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="6"></li>
-          </ol>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img class="d-block w-100" src="image/Greys-1.jpg" alt="First slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="image/greys-anatomy%202.jpg" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="image/GreysAnatomy3.jpg" alt="Third slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="image/greys-anatomy4.jpg" alt="Third slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="image/greysanatomy-specialty5.jpg" alt="Third slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="image/meredith-grey-derek-shepherd-6.jpg" alt="Third slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="image/derek-mark.7.jpeg" alt="Third slide">
-            </div>
-          </div>
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-        
-        <br>
         <div class="alert alert-secondary" role="alert">
-          <h4 class="alert-heading">Derek Memorial Hospital!</h4><hr>
-          <p>Dr.Derek Shepherd: It’s a beautiful day to save lives. Let’s have some fun.</p>
+          <h4 class="alert-heading">Derek Memorial Hospital- info!</h4><hr>
+          <p>Here at this hospital you can find any kind of specialist that you requer.</p>
           <hr>
-          <p class="mb-0">Dr.Cristina Yang: Don't let what he wants eclipse what you need. He's very dreamy, but he's not the sun. You are.</p>
+          <p class="mb-0"> We are here to help put in any way we can, at the contact us page you can send us emails and we will do our best to respond as soon as we can.</p>
           <hr>
-          <p class="mb-0">Dr.Alex Karev: You can have the worst crap in the world happen to you and you can get over it. All you gotta do is survive. </p>
-          <hr>
-          <p class="mb-0">Dr.Meredith Grey: When we follow our hearts, when we choose not to settle. It's funny, isn't it? A weight lifts, the sun shines a little brighter, and for a brief moment, we find a little peace. </p>
-          <hr>
-          <p class="mb-0">Dr.Alex Karev: It doesn't matter how tough we are. Trauma always leaves a scar. It follows us home, it changes our lives. Trauma messes everybody up. But maybe that's the point. All the pain and the fear and the crap. Maybe going through all that is what keeps us moving forward. It's what pushes us. Maybe we have to get a little messed up, before we can step up. </p>
-          
+          <p class="mb-0">An questions you may have visit us </p>
         </div>
         
-        <!--
-        <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-        -->
-        <br>
-        <nav class="navbar sticky-bottom navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
+        <a href="#" class="badge badge-dark">Light</a>
+        <br><br>
+
+           
+        <nav class="navbar fixed-bottom navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>
-             
     </body>
 </html>

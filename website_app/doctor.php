@@ -16,8 +16,14 @@
    
    <?php
     
-    $DoctorId = $_POST['ourDoctors'];
-    echo "Id: ".$DoctorId . ",";
+    $DoctorId = 0;
+        
+    if (isset($_POST['ourDoctors']))
+        $DoctorId=$_POST['ourDoctors'];
+    else
+        $DoctorId=$_GET['ourDoctors'];
+
+    //echo "Id: ".$DoctorId . ",";
     
     
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
@@ -46,7 +52,7 @@
     $result4 = mysqli_query($conn, $query4) or die ("Error in query". mysqli_error($conn)); // appointment
 
     $row2 = mysqli_fetch_assoc($result2);
-    echo  "LId:".$row2['Locality_Id'];    
+    //echo  "LId:".$row2['Locality_Id'];    
 
 
 ?>
@@ -101,12 +107,26 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
-                  <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#selectPatient">Patients</a>
-                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectAppointment">Appointments</a>
-                  <a class="dropdown-item" href="#">Medication</a>
+                 
+                 <?php
+                    if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
+                    {
+                  echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
+                        <a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
+                        <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
+                        <a class='dropdown-item' href='medication.php'>Medication</a> ";
+                    }
+                    else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
+                    {
+                      echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
+                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
+                            <a class='dropdown-item' href='medication.php'>Medication</a> ";  
+                    }
+
+                    ?>
+                
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">About Us</a>
+                  <a class="dropdown-item" href="aboutUs.php">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
                 
@@ -298,7 +318,7 @@
             
           <button type="submit" class="btn btn-outline-info" name="submitnew">Save new Details</button>
         </form>
-            
+        <br>
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>

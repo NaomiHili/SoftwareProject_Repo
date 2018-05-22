@@ -1,15 +1,4 @@
  <!DOCTYPE html>
-  
-  <?php 
-       // while($row = mysqli_fetch_assoc($A_result))
-    //    {
-    //       $row['Patient_Id'];
-    //       if ($row5['Patient_Id'] == $row4['Patient_Id'])    
-    //        {
-    //            $row['Name'];
-    //        }
-    //    }
-   ?>
    
    <?php
     session_start(); //start session for the user
@@ -26,9 +15,15 @@
     ?>
    
    <?php
+        
+        $AppointmentId = 0;
+
+        if(isset($_POST['ourAppointments']))
+            $AppointmentId = $_POST['ourAppointments'];
+        else
+            $AppointmentId = $_GET['ourAppointments'];
     
-    $AppointmentsId = $_POST['ourAppointments'];
-    echo "Id: " . $AppointmentsId . ",";
+    //echo "Id: " . $AppointmentsId . ",";
 
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
     
@@ -45,14 +40,15 @@
     Patient_tbl AS pt  ON ap.Patient_Id = pt.Patient_Id 
     WHERE ap.Appointment_Id = $AppointmentsId";
 
-    $result3 = mysql_query($conn, $query3) or die ($query3. mysqli_error($conn));
+    $result3 = mysqli_query($conn, $query3) or die ($query3. mysqli_error($conn));
     
     $query4 = "select * from Doctor_tbl";      
-    $result4 = mysql_query($conn, $query4) or die ($query4. mysqli_error($conn)); // this is used for the dropdown menu to go from app page to doctor page
+    $result4 = mysqli_query($conn, $query4) or die ($query4. mysqli_error($conn)); // this is used for the dropdown menu to go from app page to doctor page
     
     $query5 = "select * from Patient_tbl";
-    $result5 = mysql_query($conn, $query5) or die ($query5. mysqli_error($conn)); // this is used for the dropdown menu to go to from app page to patient page
-
+    $result5 = mysqli_query($conn, $query5) or die ($query5. mysqli_error($conn)); // this is used for the dropdown menu to go to from app page to patient page
+    
+    $row5 = mysqli_fetch_row($result3); //getting info from the innder join with index
     
 ?>
    
@@ -106,12 +102,23 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="doctor.php" data-toggle="modal" data-target="#selectDoctor">Doctors</a>
-                  <a class="dropdown-item" href="patient.php" data-toggle="modal" data-target="#selectPatient">Patients</a>
-                  <a class="dropdown-item" href="appointment.php" data-toggle="modal" data-target="#selectAppointment">Appointments</a>
-                  <a class="dropdown-item" href="#">Medication</a>
+               <?php
+                    if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
+                    {
+                  echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
+                        <a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
+                        <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
+                        <a class='dropdown-item' href='medication.php'>Medication</a> ";
+                    }
+                    else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
+                    {
+                      echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
+                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a> ";  
+                    }
+
+                    ?>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">About Us</a>
+                  <a class="dropdown-item" href="aboutUs.php">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
                 
@@ -243,39 +250,39 @@
         </nav>
         
         <br>
-         <form method="post" action="appointment.php" name="appointmentCRUD">
+         <form method="post" action="updateAppointment.php" name="appointmentCRUD">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label> Patient Name</label>
-              <input type="text" class="form-control" id="p_name" name="pname" placeholder="Patinet_Name" value="<?php echo $row4['Name'];?>">
+              <input type="text" class="form-control" id="p_name" name="pname" placeholder="Patinet_Name" value="<?php echo $row5[0];?>" readonly>
             </div>
             <div class="form-group col-md-6">
               <label>Doctor Name</label>
-              <input type="text" class="form-control" id="d_name" name="dsname" placeholder="Doctor_Name" value="<?php echo $row3['Name'];?>">
+              <input type="text" class="form-control" id="d_name" name="dsname" placeholder="Doctor_Name" value="<?php echo $row5[1];?>" readonly>
             </div>
           </div>
           
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>Date</label>
-              <input type="date" class="form-control" id="date"  name="date" placeholder="App_date"  value="<?php echo $row5['Date'];?>">
+              <input type="date" class="form-control" id="date"  name="date" placeholder="App_date"  value="<?php echo $row5[2];?>">
             </div>
             
             <div class="form-group col-md-6">
               <label>Time</label>
-              <input type="text" class="form-control" id="time" name="time" placeholder="App_time" value="<?php echo $row5['Time'];?>">
+              <input type="text" class="form-control" id="time" name="time" placeholder="App_time" value="<?php echo $row5[3];?>">
             </div>
           </div>     
             
             <div class="form-group">
             <label>Appointment Breif</label>
-            <textarea type="text" class="form-control" rows="3" value="" readonly> <?php echo $row5['Appointment_brief'];?> </textarea>  
+            <textarea type="text" class="form-control" name="Appbrief" rows="3" value=""> <?php echo $row5[4];?> </textarea>  
             <!-- readonly at the end of the tag -->
           </div>
           
-          <button type="submit" class="btn btn-outline-info" name="submit">Edit</button>
+          <button type="submit" class="btn btn-outline-info" name="update">Save details</button>
         </form>
-    
+        <br>
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>
