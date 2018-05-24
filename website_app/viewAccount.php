@@ -1,6 +1,13 @@
+ <!DOCTYPE html>
 <?php
     session_start(); //start session for the user
 
+//for update save collums in session post than do an updte query
+?>
+
+<?php
+    
+    
     if(!isset( $_SESSION['Username'])) 
     {
         $name = 'Guest';
@@ -9,21 +16,34 @@
     {
         $name = $_SESSION['Username'];
     }
-    
+     
+
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
     
     $query = "select * from Doctor_tbl";
-    $query1 = "select * from Patient_tbl";
-    $query2 = "select * from Appointment_tbl";
     
-    $result  = mysqli_query($conn, $query) or die ("Error in query 0". mysqli_error($conn));
-    $result1 = mysqli_query($conn, $query1) or die ("Error in query 1". mysqli_error($conn));
-    $result2 = mysqli_query($conn, $query2) or die ("Error in query 2". mysqli_error($conn));
+    $query1 = "select Name from Locality_tbl";
+    
+    $query2 = "select * from Patient_tbl";
+    
+    $query3 = "select * from Appointment_tbl";
+    
+    $result = mysqli_query($conn, $query) or die ("Error in query". mysqli_error($conn));
+    
+    $result1 = mysqli_query($conn, $query1) or die ("Error in query1". mysqli_error($conn));
+    
+    $result2 = mysqli_query($conn, $query2) or die ("Error in query2". mysqli_error($conn));
+    
+    $result3 = mysqli_query($conn, $query3) or die ("Error in query3". mysqli_error($conn));
+    
+   $query4 = "SELECT * FROM Account_tbl WHERE Username = $_SESSION[Username]";
 
-  
+   $result4 = mysqli_query($conn, $query4) 
+                        or die ("Error in query4".mysqli_error($conn));
+    $row4 = mysqli_fetch_assoc($result4);
+
 ?>
-
-<!DOCTYPE html>
+   
 <html>
     <head>
         <title> Derek Memorial Hospital</title>
@@ -33,15 +53,16 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
-       
+        
+        <script src="js/javascript.js"></script> <!-- linking the js file to the index.php -->
         <script src='../runtime/jquery-3.2.1.min.js'></script>
         <srcipt src='../runtime/popper.min.js'></srcipt>   
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">
-              <?php  
+       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <!--<img  width="30" height="30" class="d-inline-block align-top" alt="" > -->
+          <a class="navbar-brand" href="#"> 
+          <?php  
                 
                 if(isset($_SESSION['Username']))
                 {
@@ -55,7 +76,9 @@
               }
             
            ?>
-          </a>
+          
+          </a>  <!-- add username in index page-->
+          
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -74,7 +97,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 
-                <?php
+                 <?php
                     //echo $_SESSION['rowl'];
                     if (isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
                     {
@@ -90,14 +113,18 @@
                     }
 
                     ?>
+               
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="aboutUs.php">About Us</a>
                   <a class="dropdown-item" href="ContactUs.php">Contact Us</a>
                 </div>
-                
-                <li class="nav-item">
+             
+              
+              
+            
+              <li class="nav-item">  <!-- there are 7 divs in the between the lii tags -->
 
-                    <!--Doctor selection Modal -->
+                    <!-- Modal form pop up for the doctor selection -->
                     <div class="modal fade" id="selectDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -105,10 +132,8 @@
                             <h5 class="modal-title" id="exampleModalLabel">Our Doctors</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
-                            </button>  
-                            
+                            </button>     
                           </div>
-                          
                           <div class="modal-body">
                             <div class="form-group col-md-6">
                               <label> Your doctor:</label>
@@ -120,8 +145,7 @@
                                     echo "<option value=".$row['Doctor_Id'].">". $row['Name']."</option>";
                                   }
                                 ?>
-                              </select>7
-            
+                              </select>
                           <div class="modal-footer">
                             <input type="submit" class="btn btn-outline-danger" value="Choose doctor">
                           </div>
@@ -129,9 +153,12 @@
                         </div>
                       </div>
                     </div>
+                  </div>
+                  </div>
               </li>
               
-               <li class="nav-item"> <!-- nav item for patients -->
+              
+              <li class="nav-item"> <!-- nav item for patients -->
                     <!-- Modal -->
                     <div class="modal fade" id="selectPatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
@@ -148,7 +175,7 @@
                               <form method="post" action="patient.php">
                               <select id="yourPatient" name="ourPatients" class="form-control">
                                  <?php
-                                  while($row1 = mysqli_fetch_assoc($result1))
+                                  while($row1 = mysqli_fetch_assoc($result2))
                                   {
                                     echo "<option value=".$row1['Patient_Id'].">". $row1['Name']."</option>";
                                   }
@@ -180,7 +207,7 @@
                               <form method="post" action="appointment.php">
                               <select id="yourAppointment" name="ourAppointments" class="form-control">
                                  <?php
-                                  while($row3 = mysqli_fetch_assoc($result2))
+                                  while($row3 = mysqli_fetch_assoc($result3))
                                   {
                                     echo "<option value=".$row3['Appointment_Id'].">". $row3['Appointment_Id']."</option>";
                                   }
@@ -193,9 +220,8 @@
                         </div>
                       </div>
                     </div>
-                  </li> 
-                
-              </li>
+                  </li>  
+             </li>
             </ul>
             
              <div class="btn-group mr-sm-2">
@@ -204,7 +230,9 @@
                 </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="login.php">Login</a>
-                    <a class="dropdown-item" href="login.php">Logout</a>
+                    <a class="dropdown-item" href="logout.php" name="logout">Logout</a> 
+                    
+                    
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="viewAccount.php">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
@@ -218,66 +246,37 @@
                           
           </div>
         </nav>
-    
-       <h3>Please Login: </h3>
-        <form class="px-4 py-3" method="post" action="logindb.php">
-            <div class="form-group">
-              <label>Username: </label>
-              <input type="username" class="form-control" id="Username" name="username" placeholder="username">
+         
+         <br>
+         <form method="post" action="viewAccount.php" name="doctorCRUD">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label> Username</label>
+              <input type="text" class="form-control" id="username" name="username" value="<?php echo $row4['Username']; ?>">
             </div>
-            <div class="form-group">
-              <label>Password:</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-            </div>
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="dropdownCheck">
-              <label class="form-check-label" for="dropdownCheck"> Remember me </label>
-            </div>
-            <br>
-            <button type="submit" class="btn btn-outline-info" name="submit">Sign in</button>
-          </form>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Forgot password?</a>
-
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Forgot your password: </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form class="px-4 py-3" method="post" action="forgotpassword.php">
-                      <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control" name="username" placeholder="username">
-                      </div>
-                      <div class="form-group">
-                        <label for="message-text" class="col-form-label">Email address:</label>
-                        <input type="email" class="form-control" name="email" placeholder="email">
-                      </div>
-                    
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                   <button type="submit" class="btn btn-info" name="submit1">Send Message</button>
-                  </div>
-                  </form>
-                </div>
-              </div>
-            </div>
+          </div>
           
-          <a class="dropdown-item" href="registration.php">New around here? Sign up</a>
-        
+          <div class="form-row">
+              <div class="form-group col-md-6">
+              <label>Email</label>
+              <input type="email" class="form-control" id="email" name="emial" value="<?php echo $row4['Email']; ?>">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Password</label>
+              <input type="password" class="form-control" id="password"  name="password"  value="<?php $row4['Password']; ?>">
+            </div>
+             </div>
+            
+            <br>  
+          <button type="submit" class="btn btn-outline-info" name="update">Save new Details</button>
+        </form>
+        <br>
         <nav class="navbar fixed-bottom navbar-dark bg-dark">
           <a class="navbar-brand" href="#">© Naomi Hili SWD4.2A - 2018</a>
         </nav>
+             
     </body>
 </html>
-
-
-
-        
-   

@@ -27,7 +27,7 @@
 
     $conn = mysqli_connect("localhost", "root", "", "Hospital_db","3306")  or die ('Cannot donnect to the db');
     
-    $query1 = "select * from Appointment_tbl  where Appointment_Id = $AppointmentsId"; // selec the table id
+    $query1 = "select * from Appointment_tbl  where Appointment_Id = $AppointmentId"; // selec the table id
     $result1 = mysqli_query($conn, $query1) or die ($query1. mysqli_error($conn)); // appointment Id result
 
     $query2 = "select * from Appointment_tbl";
@@ -38,7 +38,7 @@
     FROM Appointment_tbl AS ap INNER JOIN 
     Doctor_tbl AS dc ON ap.Doctor_Id = dc.Doctor_Id INNER JOIN 
     Patient_tbl AS pt  ON ap.Patient_Id = pt.Patient_Id 
-    WHERE ap.Appointment_Id = $AppointmentsId";
+    WHERE ap.Appointment_Id = $AppointmentId";
 
     $result3 = mysqli_query($conn, $query3) or die ($query3. mysqli_error($conn));
     
@@ -102,18 +102,19 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-               <?php
-                    if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
+              <?php
+                    //echo $_SESSION['rowl'];
+                    if (isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
                     {
                   echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
                         <a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
                         <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
                         <a class='dropdown-item' href='medication.php'>Medication</a> ";
                     }
-                    else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
+                    else if(isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Patient" && $name != "Guest")
                     {
                       echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
-                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a> ";  
+                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>";  
                     }
 
                     ?>
@@ -236,7 +237,7 @@
                     <a class="dropdown-item" href="login.php">Login</a>
                     <a class="dropdown-item" href="logout.php" name="logout">Logout</a> 
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="">View account</a>
+                    <a class="dropdown-item" href="viewAccount.php">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
                   </div>
             </div>
@@ -251,6 +252,9 @@
         
         <br>
          <form method="post" action="updateAppointment.php" name="appointmentCRUD">
+         
+         <input type="hidden" class="form-control" id="appId"  name="appId" value="<?php echo $AppointmentId; ?>">
+         
           <div class="form-row">
             <div class="form-group col-md-6">
               <label> Patient Name</label>

@@ -54,12 +54,16 @@
     echo $query2;
     //mysqli_query($conn1,$query2); calling this in the if statment
     
-
+     //echo"<script>window.location.href='registration.php';alert('Validation fields .');</script>";
     
-    if($Name == "" || $Surname == "" || $Housname == "" || $Street == "" || $Postcode == "" || $MobileNum < 99999999  || $MobileNum > 77000000 || $Username == "" || $Email == "" || $Password == "")
+    if($Name == "" || $Surname == "" || $Housname == "" || $Street == "" || $Postcode == "" || $Username == "" || $Email == "" || $Password == "")
     {
         echo"<script>window.location.href='registration.php';alert('Please fill in all the fields.');</script>";
         
+    }
+    else if (!($MobileNum > 77000000 && $MobileNum < 99999999))
+    {
+      echo"<script>window.location.href='registration.php';alert('Incorrect mobile number .');</script>";   
     }
     else
     {

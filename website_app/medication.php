@@ -93,15 +93,17 @@
                   Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <?php
-                    if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
+            
+                <?php
+                    //echo $_SESSION['rowl'];
+                    if (isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
                     {
                   echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
                         <a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
                         <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
                         <a class='dropdown-item' href='medication.php'>Medication</a> ";
                     }
-                    else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
+                    else if(isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Patient" && $name != "Guest")
                     {
                       echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
                             <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>";  
@@ -197,7 +199,7 @@
                           <div class="modal-body">
                             <div class="form-group col-md-6">
                               <label> Your Patients:</label>
-                              <form method="post" action="patient.php">
+                              <form method="post" action="medication.php">
                               <select id="yourPatient" name="ourPatients" class="form-control">
                                  <?php
                                   while($row3 = mysqli_fetch_assoc($result4))
@@ -227,7 +229,7 @@
                     <a class="dropdown-item" href="login.php">Login</a>
                     <a class="dropdown-item" href="logout.php" name="logout">Logout</a> 
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="">View account</a>
+                    <a class="dropdown-item" href="viewAccount.php">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
                   </div>
             </div>
@@ -253,7 +255,8 @@
             <?php
                 if($result5->num_rows > 0){
                     while($row = $result5->fetch_assoc()){
-                        echo '<tr><td>'.$row["name"].'</td><td>'.$row["surname"].'</td><td>'.$row["name2"].'</td></tr>';
+                        echo '<tr><td>'.$row["name"].'</td><td>'.$row["surname"].'</td><td>'.$row["name2"].'</td>
+                        <td><button type="submit" class="btn btn-outline-danger" name="deletitem">Delete</button></td></tr>';
                     }
                 } else {
                     echo "0 results";
@@ -267,3 +270,27 @@
         </nav>
     </body>
 </html>
+
+<?php
+       if(isset($_POST['deletitem']))
+       {
+           $conn = mysqli_connect('localhost', 'root','','Hospital_db','3306') or die ('Cannot connect to the db');
+        
+            $PId = "SELECT Patient_Id FROM Patient_tbl";
+            $MId = "SELECT Medication_Id FROM Medicaion_tbl";
+    
+           //echo $PId;
+           //echo $MId;
+    
+           $delete = "Delete from PatientMedication_tbl where Patient_Id = $PId, Medication_Id = $MId";
+           mysqli_query($conn, $delete) or die ($delete. mysqli_error($conn));
+    
+        
+         echo"<script>window.location.href='medication.php?';alert('Item delete from databse. ');</script>";
+           
+           
+       }
+       
+    
+       
+?>

@@ -77,18 +77,18 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <?php
-                    if ($_SESSION['rowl'] = "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
+                    //echo $_SESSION['rowl'];
+                    if (isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Doctor" && $name != "Guest" && $_SESSION['rowl'] != "Patient")
                     {
                   echo "<a class='dropdown-item' href='doctor.php' data-toggle='modal' data-target='#selectDoctor'>Doctors</a>
                         <a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
                         <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
                         <a class='dropdown-item' href='medication.php'>Medication</a> ";
                     }
-                    else if($_SESSION['rowl'] = "Patient" && $name != "Guest")
+                    else if(isset($_SESSION['rowl']) && $_SESSION['rowl'] == "Patient" && $name != "Guest")
                     {
                       echo "<a class='dropdown-item' href='patient.php' data-toggle='modal' data-target='#selectPatient'>Patients</a>
-                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>
-                            <a class='dropdown-item' href='medication.php'>Medication</a> ";  
+                            <a class='dropdown-item' href='appointment.php' data-toggle='modal' data-target='#selectAppointment'>Appointments</a>";  
                     }
 
                     ?>
@@ -107,7 +107,7 @@
                     <a class="dropdown-item" href="login.php">Login</a>
                     <a class="dropdown-item" href="login.php">Logout</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="">View account</a>
+                    <a class="dropdown-item" href="viewAccount.php">View account</a>
                     <a class="dropdown-item" href="registration.php">Create account</a>
                   </div>
             </div>
